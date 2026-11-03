@@ -1,0 +1,40 @@
+[package]
+name = "copperview"
+version = "0.2.0"
+edition = "2024"
+description = "Look at PCB Gerber files, measure anything you click, and compare two folders or zips."
+
+[[bin]]
+name = "copperview"
+path = "src/main.rs"
+
+[dependencies]
+earcut = "0.4"
+glam = "0.34"
+eframe = { version = "0.37.0", default-features = false, features = ["glow", "wayland", "x11"] }
+png = "0.18"
+rfd = { version = "0.17.2", default-features = false, features = ["xdg-portal"] }
+flate2 = { version = "1", default-features = false, features = ["rust_backend"] }
+zip = { version = "9.2.1", default-features = false, features = ["deflate-flate2"] }
+
+# Trackpad pinches on Linux, which the window library doesn't pass on.
+libc = "0.2"
+raw-window-handle = "0.6"
+wayland-client = "0.31"
+wayland-protocols = { version = "0.32", features = ["client", "unstable"] }
+
+# Big boards are read and drawn on the laptop, so even a plain `cargo build`
+# has to be fast at it.
+[profile.dev]
+opt-level = 2
+debug = false
+strip = true
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+opt-level = "s"
+strip = true
+lto = true
+codegen-units = 1

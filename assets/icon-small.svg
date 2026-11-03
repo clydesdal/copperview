@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#18273f"/>
+  <!-- The same layers with heavier lines and more air, for small sizes. -->
+  <g fill="none" stroke-width="56" stroke-linejoin="miter">
+    <path d="M256 262L438 362L256 462L74 362Z" stroke="#e56a6a"/>
+    <path d="M256 156L438 256L256 356L74 256Z" stroke="#f2d24b"/>
+    <path d="M256 50L438 150L256 250L74 150Z" stroke="#75abff"/>
+  </g>
+</svg>

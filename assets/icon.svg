@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e3150"/>
+      <stop offset="1" stop-color="#121d31"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#tile)"/>
+  <!-- Three board layers, stacked: red at the bottom, then yellow, then blue. -->
+  <g fill="none" stroke-width="37" stroke-linejoin="miter">
+    <path d="M256 237L428 335L256 433L84 335Z" stroke="#e56a6a"/>
+    <path d="M256 158L428 256L256 354L84 256Z" stroke="#f2d24b"/>
+    <path d="M256 79L428 177L256 275L84 177Z" stroke="#75abff"/>
+  </g>
+</svg>
