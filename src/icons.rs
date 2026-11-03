@@ -145,6 +145,8 @@ pub const PICTURES: [(u32, &[u8]); 8] = [
     (256, include_bytes!("../assets/icons/256.png")),
     (512, include_bytes!("../assets/icons/512.png")),
 ];
+/// Only the Linux installer writes this out.
+#[allow(dead_code)]
 pub const SCALABLE: &str = include_str!("../assets/icon.svg");
 
 /// The app's picture as plain pixels, for the window and the top bar.

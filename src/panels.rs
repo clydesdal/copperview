@@ -911,7 +911,7 @@ impl App {
 
     /// Offers to install, until it's done. The check run's picture leaves it out.
     fn install_card(&mut self, ui: &mut Ui) {
-        if self.installed || self.launch.screenshot.is_some() {
+        if !crate::platform::CAN_INSTALL || self.installed || self.launch.screenshot.is_some() {
             return;
         }
         card(ui, |ui| {
@@ -919,7 +919,7 @@ impl App {
             ui.label(RichText::new("Adds it to your Applications folder and app launcher.").size(13.0).color(DIM));
             ui.add_space(4.0);
             if tool_button(ui, Icon::Down, "Install", true).clicked() {
-                match crate::setup::install() {
+                match crate::platform::install() {
                     Ok(()) => {
                         self.installed = true;
                         self.notice = Some("Installed. Find Copperview in your app launcher.".to_string());

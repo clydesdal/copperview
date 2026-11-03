@@ -241,6 +241,8 @@ pub struct App {
     pub show_left: bool,
     pub show_right: bool,
     pub show_about: bool,
+    /// The system menu's About item has been pointed at the About window.
+    pub about_hooked: bool,
     /// Whether the details panel is actually showing this frame.
     pub right_open: bool,
     /// The board was fitted and hasn't been moved since, so it follows the room.
@@ -303,10 +305,7 @@ pub struct App {
 }
 
 fn state_file() -> Option<PathBuf> {
-    let base = std::env::var_os("XDG_CONFIG_HOME")
-        .map(PathBuf::from)
-        .or_else(|| std::env::var_os("HOME").map(|h| Path::new(&h).join(".config")))?;
-    Some(base.join("copperview").join("last-opened"))
+    Some(crate::platform::config_dir()?.join("last-opened"))
 }
 
 fn remembered() -> (Option<PathBuf>, Option<PathBuf>) {
@@ -359,6 +358,7 @@ impl App {
             show_left: true,
             show_right: true,
             show_about: false,
+            about_hooked: false,
             right_open: true,
             fitted: true,
             pinch: Pinch::default(),
@@ -404,7 +404,7 @@ impl App {
                 let picture = ColorImage::from_rgba_unmultiplied([side, side], &pixels);
                 cc.egui_ctx.load_texture("logo", picture, egui::TextureOptions::LINEAR)
             }),
-            installed: crate::setup::is_current(),
+            installed: crate::platform::is_current(),
             choices: Vec::new(),
             play: Vec::new(),
             frames: 0,
@@ -764,7 +764,7 @@ impl App {
                 Key::X => *event = egui::Event::Cut,
                 // Asking the clipboard takes a moment, so only when there's somewhere to put it.
                 Key::V if self.markup.editing.is_some() => {
-                    if let Some(text) = crate::clip::paste() {
+                    if let Some(text) = crate::platform::clipboard_paste() {
                         *event = egui::Event::Paste(text);
                     }
                 }
@@ -786,8 +786,8 @@ impl App {
         for text in texts.into_iter().filter(|t| !t.is_empty()) {
             let (tx, wake) = (self.asked_tx.clone(), ctx.clone());
             std::thread::spawn(move || {
-                if !crate::clip::copy(&text) {
-                    let _ = tx.send(Asked::Say("Copying needs wl-clipboard or xclip installed.".to_string()));
+                if !crate::platform::clipboard_copy(&text) {
+                    let _ = tx.send(Asked::Say(crate::platform::clipboard_missing_hint().to_string()));
                     wake.request_repaint();
                 }
             });
@@ -1283,6 +1283,12 @@ impl eframe::App for App {
         let status_frame = egui::Frame::new().fill(theme::WELL).inner_margin(egui::Margin::symmetric(12, 5));
         Panel::bottom("status").resizable(false).frame(status_frame).show(ui, |ui| self.status_bar(ui));
         egui::CentralPanel::default().frame(egui::Frame::new().fill(theme::WELL)).show(ui, |ui| self.canvas(ui));
+        if !self.about_hooked {
+            self.about_hooked = crate::platform::hook_about_menu(&ctx);
+        }
+        if crate::platform::about_requested() {
+            self.show_about = true;
+        }
         self.about_window(&ctx);
         self.send_copies(&ctx);
     }

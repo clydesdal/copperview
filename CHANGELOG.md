@@ -4,6 +4,14 @@ What each version does differently from the one before. Newest first. When
 behaviour changes, bump `version` in `Cargo.toml` and add an entry here; the
 About screen shows this file.
 
+## 0.2.1
+
+- Copy and paste work on macOS (through `pbcopy` and `pbpaste`) and on Windows (through PowerShell); before, only Linux's clipboard tools were used.
+- The "Keep Copperview" card, which installs the program, appears only on Linux. On a Mac, `make-macos-app.sh` builds `Copperview.app` to drag into Applications.
+- On a Mac the boards last opened are remembered in `~/Library/Application Support/copperview`; they are forgotten once when you first run this version.
+- On a Mac, About Copperview in the app menu opens the same About window as the name at the top left, with the version and this log.
+- The same source now builds on Linux, macOS and Windows: system-specific code is in `src/platform/`.
+
 ## 0.2.0
 
 ### Comparing two boards

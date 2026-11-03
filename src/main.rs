@@ -5,7 +5,6 @@ mod altium;
 mod app;
 mod board;
 mod board3d;
-mod clip;
 mod compare;
 mod excellon;
 mod geom;
@@ -16,10 +15,10 @@ mod icons;
 mod markup;
 mod panels;
 mod pinch;
+mod platform;
 mod play;
 mod samples;
 mod trace;
-mod setup;
 mod theme;
 mod view;
 mod view3d;
@@ -97,13 +96,13 @@ fn run() -> Result<(), String> {
                 return Ok(());
             }
             "install" if launch == Launch::default() && paths.is_empty() => {
-                setup::install()?;
+                platform::install()?;
                 println!("Copperview is installed. Find it in your app launcher, or run: copperview");
                 println!("To remove it later, run: copperview uninstall");
                 return Ok(());
             }
             "uninstall" if launch == Launch::default() && paths.is_empty() => {
-                setup::uninstall()?;
+                platform::uninstall()?;
                 println!("Copperview has been removed. Your Gerber files weren't touched.");
                 return Ok(());
             }

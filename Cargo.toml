@@ -1,7 +1,8 @@
 [package]
 name = "copperview"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2024"
+rust-version = "1.88"
 description = "Look at PCB Gerber files, measure anything you click, and compare two folders or zips."
 
 [[bin]]
@@ -11,17 +12,29 @@ path = "src/main.rs"
 [dependencies]
 earcut = "0.4"
 glam = "0.34"
-eframe = { version = "0.37.0", default-features = false, features = ["glow", "wayland", "x11"] }
 png = "0.18"
-rfd = { version = "0.17.2", default-features = false, features = ["xdg-portal"] }
 flate2 = { version = "1", default-features = false, features = ["rust_backend"] }
 zip = { version = "9.2.1", default-features = false, features = ["deflate-flate2"] }
-
-# Trackpad pinches on Linux, which the window library doesn't pass on.
-libc = "0.2"
 raw-window-handle = "0.6"
+
+# What every system needs. Each system's extras follow, so a build only pulls
+# in the libraries for the machine it is on. The code for each is in src/platform.
+eframe = { version = "0.37.0", default-features = false, features = ["glow"] }
+rfd = { version = "0.17.2", default-features = false }
+
+# Linux and other Unix desktops: both window systems, the portal file chooser,
+# and the trackpad pinches the window library doesn't pass on (src/pinch.rs).
+[target.'cfg(target_os = "linux")'.dependencies]
+eframe = { version = "0.37.0", default-features = false, features = ["glow", "wayland", "x11"] }
+rfd = { version = "0.17.2", default-features = false, features = ["xdg-portal"] }
+libc = "0.2"
 wayland-client = "0.31"
 wayland-protocols = { version = "0.32", features = ["client", "unstable"] }
+
+# macOS: the app menu's About item opens the program's own About window.
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+objc2-app-kit = { version = "0.3", default-features = false, features = ["std", "NSApplication", "NSMenu", "NSMenuItem", "NSResponder"] }
 
 # Big boards are read and drawn on the laptop, so even a plain `cargo build`
 # has to be fast at it.

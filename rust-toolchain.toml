@@ -1,0 +1,5 @@
+# The same compiler on every machine. rustup picks this up by itself; a
+# toolchain from somewhere else (Homebrew, a distro) just needs to be 1.88 or newer.
+[toolchain]
+channel = "1.99"
+profile = "minimal"

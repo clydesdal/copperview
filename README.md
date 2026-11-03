@@ -15,6 +15,26 @@ Esc clear.
 The sample board is made up, and written as real Gerber text with Altium's
 file names. `copperview --write-sample DIR` saves it as files.
 
+## Building
+
+One source builds on Linux, macOS and Windows. `rust-toolchain.toml` pins the
+compiler (rustup uses it by itself; anything 1.88 or newer works), and
+`Cargo.lock` pins every library, so each machine builds the same program.
+
+    cargo build --release          # any system; the program is target/release/copperview
+    sh make-macos-app.sh           # on a Mac: dist/Copperview.app
+    sh make-installer.sh           # on Linux: dist/install-copperview-<version>.sh
+
+Everything that differs between systems is in `src/platform/`, one file for
+each, offering the same few things: where settings live, copy and paste, and
+installing. `src/pinch.rs` holds the Linux trackpad-pinch code, and each
+system's libraries are listed under its own heading in `Cargo.toml`. The
+tests also compile the other systems' files, so changing one on a Mac or a
+Linux machine is checked against the rest.
+
+On Windows the program is just `copperview.exe`; there is no installer yet, and
+the Windows code is checked by the tests but hasn't been run on a Windows machine.
+
 ## Versions
 
 `CHANGELOG.md` lists what each version does differently. The About screen (click the Copperview name at the top left) shows the version and that log. When behaviour changes, bump `version` in `Cargo.toml` and add an entry.

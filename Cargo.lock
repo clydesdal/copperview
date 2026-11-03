@@ -290,13 +290,15 @@ dependencies = [
 
 [[package]]
 name = "copperview"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "earcut",
  "eframe",
  "flate2",
  "glam",
  "libc",
+ "objc2 0.6.5",
+ "objc2-app-kit 0.3.2",
  "png",
  "raw-window-handle",
  "rfd",
