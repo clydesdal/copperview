@@ -1,6 +1,6 @@
 # Copperview
 
-Look at PCB Gerber files, measure anything you click, and compare two sets.
+A gerber viewer for a specific workflow --only really set up for Altium currently. Allows you to compare versions of build files and show specific board changes. Pretty usable now even though it's vibe coded. Adding and changing things fairly rapidly so functions will change.
 
     copperview                    open the window
     copperview FOLDER_OR_ZIP      open one set
@@ -12,7 +12,7 @@ Pinch the trackpad or scroll to zoom. Keys: F fit, M ruler, T mark up, Ctrl+Z un
 N and P next and previous change, Delete remove the selected measurement,
 Esc clear.
 
-The sample board is made up, and written as real Gerber text with Altium's
+The sample board is vibe coded and really suck --I'll change it soon, and written as real Gerber text with Altium's
 file names. `copperview --write-sample DIR` saves it as files.
 
 ## Building
