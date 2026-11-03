@@ -51,3 +51,9 @@ the app launcher, or press Install inside the app. `copperview uninstall` takes
 it out again. Copy and paste use `wl-clipboard` or `xclip`.
 
 Figtree is included under the SIL Open Font License (see assets/fonts/OFL.txt).
+
+## License
+
+Copperview is released under the MIT License (see `LICENSE`). Figtree, the
+font in `assets/fonts`, keeps its own license, the SIL Open Font License
+(`assets/fonts/OFL.txt`).

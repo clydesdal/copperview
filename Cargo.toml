@@ -3,6 +3,7 @@ name = "copperview"
 version = "0.2.1"
 edition = "2024"
 rust-version = "1.88"
+license = "MIT"
 description = "Look at PCB Gerber files, measure anything you click, and compare two folders or zips."
 
 [[bin]]
