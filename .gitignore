@@ -1,2 +1,4 @@
 target/
 dist/
+# Screenshots can show other windows and personal details; keep new ones out.
+shots/

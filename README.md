@@ -32,6 +32,10 @@ system's libraries are listed under its own heading in `Cargo.toml`. The
 tests also compile the other systems' files, so changing one on a Mac or a
 Linux machine is checked against the rest.
 
+Every push and pull request is built and tested on Linux, macOS and Windows by
+`.github/workflows/ci.yml`. Each run keeps the Linux installer, the Mac app
+(zipped) and `copperview.exe` as downloads on its page under Actions.
+
 On Windows the program is just `copperview.exe`; there is no installer yet, and
 the Windows code is checked by the tests but hasn't been run on a Windows machine.
 

@@ -1,0 +1,99 @@
+# Builds and tests Copperview on Linux, macOS and Windows for every push and
+# pull request, and keeps the finished program from each as a download.
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A newer push to the same branch makes an older, unfinished run pointless.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux
+            os: ubuntu-latest
+          - name: macOS
+            os: macos-latest
+          - name: Windows
+            os: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # The compiler named in rust-toolchain.toml, so every machine builds with the same one.
+      - name: Install the pinned Rust
+        shell: bash
+        run: |
+          rustup toolchain install
+          rustc --version
+          cargo --version
+
+      - name: Cache built libraries
+        uses: Swatinem/rust-cache@v2
+
+      # Mostly the window libraries load these when the program runs, but
+      # having them here keeps a build from stopping on a missing header.
+      - name: Install Linux build libraries
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxkbcommon-dev libwayland-dev libx11-dev libgl1-mesa-dev
+
+      - name: Test
+        run: cargo test --locked
+
+      - name: Build
+        run: cargo build --release --locked
+
+      # Each system keeps what it would hand to a person: the Linux installer,
+      # the Mac app, the Windows program.
+      - name: Package for Linux
+        if: runner.os == 'Linux'
+        run: sh make-installer.sh
+
+      - name: Package for macOS
+        if: runner.os == 'macOS'
+        run: |
+          sh make-macos-app.sh
+          ditto -c -k --keepParent dist/Copperview.app dist/Copperview-macos.zip
+
+      - name: Upload the Linux installer
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: copperview-linux
+          path: dist/install-copperview-*.sh
+          if-no-files-found: error
+
+      - name: Upload the Mac app
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: copperview-macos
+          path: dist/Copperview-macos.zip
+          if-no-files-found: error
+
+      - name: Upload the Windows program
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: copperview-windows
+          path: target/release/copperview.exe
+          if-no-files-found: error
