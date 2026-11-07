@@ -826,8 +826,11 @@ impl App {
                 Ok(boards) => {
                     let mut boards = boards.into_iter();
                     let Some(board) = boards.next() else { continue };
-                    // A second board loaded with no first one becomes the first.
-                    let side = if side == Side::B && self.a.is_none() { Side::A } else { side };
+                    // A second board loaded with no first one becomes the first,
+                    // unless the first is still on its way: both load at once, and
+                    // a big A can finish after B.
+                    let a_coming = self.pending.iter().any(|p| p.side == Side::A);
+                    let side = if side == Side::B && self.a.is_none() && !a_coming { Side::A } else { side };
                     self.notice = board.warnings.first().cloned();
                     if !board.choices.is_empty() {
                         self.choices = board.choices.clone();
