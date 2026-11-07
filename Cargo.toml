@@ -1,6 +1,6 @@
 [package]
 name = "copperview"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2024"
 rust-version = "1.88"
 license = "MIT"
@@ -36,6 +36,10 @@ wayland-protocols = { version = "0.32", features = ["client", "unstable"] }
 [target.'cfg(target_os = "macos")'.dependencies]
 objc2 = "0.6"
 objc2-app-kit = { version = "0.3", default-features = false, features = ["std", "NSApplication", "NSMenu", "NSMenuItem", "NSResponder"] }
+
+# Windows: the icon and version details inside copperview.exe (build.rs).
+[target.'cfg(windows)'.build-dependencies]
+winresource = "0.1.34"
 
 # Big boards are read and drawn on the laptop, so even a plain `cargo build`
 # has to be fast at it.

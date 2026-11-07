@@ -1,0 +1,5 @@
+# With Microsoft's Windows toolchain (as on GitHub's Windows machines), build the
+# C runtime into copperview.exe, so it runs on a computer without the Visual C++
+# runtime installed. The GNU toolchain uses the one Windows already has.
+[target.'cfg(all(windows, target_env = "msvc"))']
+rustflags = ["-C", "target-feature=+crt-static"]

@@ -1,10 +1,12 @@
 # Builds and tests Copperview on Linux, macOS and Windows for every push and
-# pull request, and keeps the finished program from each as a download.
+# pull request, and keeps the installer for each as a download. A tag like
+# v0.2.2 also puts the installers on a GitHub release.
 name: Build
 
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
   workflow_dispatch:
 
@@ -27,8 +29,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # The oldest Ubuntu GitHub still offers, so the Linux program also
+          # runs on older systems than the newest.
           - name: Linux
-            os: ubuntu-latest
+            os: ubuntu-22.04
           - name: macOS
             os: macos-latest
           - name: Windows
@@ -44,6 +48,11 @@ jobs:
           rustup toolchain install
           rustc --version
           cargo --version
+
+      # The Mac app is built for Apple Silicon and Intel both.
+      - name: Add the Intel and Apple Silicon targets
+        if: runner.os == 'macOS'
+        run: rustup target add aarch64-apple-darwin x86_64-apple-darwin
 
       - name: Cache built libraries
         uses: Swatinem/rust-cache@v2
@@ -63,16 +72,22 @@ jobs:
         run: cargo build --release --locked
 
       # Each system keeps what it would hand to a person: the Linux installer,
-      # the Mac app, the Windows program.
+      # the Mac app, the Windows installer and program.
       - name: Package for Linux
         if: runner.os == 'Linux'
         run: sh make-installer.sh
 
       - name: Package for macOS
         if: runner.os == 'macOS'
+        run: sh make-macos-app.sh --universal
+
+      # Inno Setup builds the installer; the runner may already have it.
+      - name: Package for Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
         run: |
-          sh make-macos-app.sh
-          ditto -c -k --keepParent dist/Copperview.app dist/Copperview-macos.zip
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) { choco install innosetup -y --no-progress }
+          ./make-windows-installer.ps1
 
       - name: Upload the Linux installer
         if: runner.os == 'Linux'
@@ -87,7 +102,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: copperview-macos
-          path: dist/Copperview-macos.zip
+          path: dist/Copperview-*-macos.dmg
           if-no-files-found: error
 
       - name: Upload the Windows program
@@ -95,5 +110,26 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: copperview-windows
-          path: target/release/copperview.exe
+          path: |
+            dist/copperview.exe
+            dist/copperview-setup-*.exe
           if-no-files-found: error
+
+  # A tag like v0.2.2: the installers from the three builds go on a release.
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: installers
+          merge-multiple: true
+      - name: Make the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" installers/* --repo "$GITHUB_REPOSITORY" \
+            --title "Copperview ${GITHUB_REF_NAME#v}" --generate-notes
