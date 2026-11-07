@@ -11,6 +11,7 @@ About screen shows this file.
 - `copperview.exe` carries the Copperview icon, name and version, for Explorer, the taskbar and Task Manager.
 - `copperview.exe` built with Microsoft's Rust toolchain has the C runtime inside it, so it runs on a computer without the Visual C++ runtime.
 - The Mac app comes as `Copperview-<version>-macos.dmg`, and the one built on GitHub runs on both Apple Silicon and Intel Macs.
+- Copperview opens on an empty window waiting for a folder or zip, rather than on the sample board, and the welcome screen no longer offers the sample. `copperview --write-sample DIR` still saves it as files to open.
 - Pushing a version tag such as `v0.2.2` puts the Windows, Mac and Linux installers on a GitHub release.
 
 ## 0.2.1

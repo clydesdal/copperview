@@ -431,7 +431,10 @@ impl App {
                     app.open(Side::B, path);
                 }
             }
-            None => app.open_sample(),
+            // With nothing to open, the welcome screen waits for a folder or
+            // zip. Only a check run starts on the sample.
+            None if app.launch.screenshot.is_some() => app.open_sample(),
+            None => {}
         }
         app
     }
