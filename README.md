@@ -2,6 +2,16 @@
 
 A gerber viewer for a specific workflow --only really set up for Altium currently. Allows you to compare versions of build files and show specific board changes. Pretty usable now even though it's vibe coded. Adding and changing things fairly rapidly so functions will change.
 
+## Download
+
+[The newest builds](https://github.com/clydesdal/copperview/actions/workflows/ci.yml?query=branch%3Amain+is%3Asuccess)
+are on the Actions page. Open the run at the top of the list and look under
+Artifacts: `copperview-linux` is the Linux installer, `copperview-macos` the Mac
+app (zipped) and `copperview-windows` is `copperview.exe`. GitHub only hands
+these out when you are signed in, and keeps each for 90 days.
+
+## Using it
+
     copperview                    open the window
     copperview FOLDER_OR_ZIP      open one set
     copperview A B                compare two sets, folders or zips in any mix
