@@ -870,10 +870,6 @@ impl App {
                 self.ask_zip(Side::A, ui.ctx());
             }
         });
-        child.add_space(6.0);
-        if child.add(egui::Button::new("Show the sample board").frame(false)).clicked() {
-            self.open_sample();
-        }
         if !self.pending.is_empty() {
             child.add_space(8.0);
             child.horizontal(|ui| {

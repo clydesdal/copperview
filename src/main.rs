@@ -1,6 +1,10 @@
 //! Copperview: look at PCB Gerber files, measure anything you click, and
 //! compare two folders or zips.
 
+// On Windows, a window program rather than a console one, so no black box
+// opens beside it. Typed into a console, it still prints there (see main).
+#![cfg_attr(windows, windows_subsystem = "windows")]
+
 mod altium;
 mod app;
 mod board;
@@ -158,7 +162,21 @@ fn run() -> Result<(), String> {
         .map_err(|e| format!("The window couldn't open: {e}"))
 }
 
+/// A window program on Windows has no console of its own. Started from one, it
+/// borrows that console, so --help, --version and errors still show up there.
+#[cfg(windows)]
+fn use_parent_console() {
+    #[link(name = "kernel32")]
+    unsafe extern "system" {
+        fn AttachConsole(process: u32) -> i32;
+    }
+    const ATTACH_PARENT_PROCESS: u32 = u32::MAX;
+    unsafe { AttachConsole(ATTACH_PARENT_PROCESS) };
+}
+
 fn main() {
+    #[cfg(windows)]
+    use_parent_console();
     if let Err(error) = run() {
         eprintln!("copperview: {error}");
         std::process::exit(1);

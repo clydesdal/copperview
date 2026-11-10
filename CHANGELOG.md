@@ -4,6 +4,17 @@ What each version does differently from the one before. Newest first. When
 behaviour changes, bump `version` in `Cargo.toml` and add an entry here; the
 About screen shows this file.
 
+## 0.2.2
+
+- Windows has an installer: `make-windows-installer.ps1` builds `copperview-setup-<version>.exe`. It installs for you alone without asking for an administrator (or for everyone, if you choose), adds Copperview to the Start menu, and can add it to PATH, put it on the desktop, and add "Open in Copperview" when right-clicking a folder or zip. Settings > Apps removes it, and replaces the hand-made 0.1.0 entry there.
+- On Windows, opening Copperview no longer opens a console window beside it. Typed into a console, `--help`, `--version` and errors still print there.
+- `copperview.exe` carries the Copperview icon, name and version, for Explorer, the taskbar and Task Manager.
+- `copperview.exe` built with Microsoft's Rust toolchain has the C runtime inside it, so it runs on a computer without the Visual C++ runtime.
+- The Mac app comes as `Copperview-<version>-macos.dmg`, and the one built on GitHub runs on both Apple Silicon and Intel Macs.
+- Copperview opens on an empty window waiting for a folder or zip, rather than on the sample board, and the welcome screen no longer offers the sample. `copperview --write-sample DIR` still saves it as files to open.
+- Opening two boards at once no longer sometimes loses the second. When B finished loading before A, which happens with big boards, B was moved into A's place and then replaced when A arrived.
+- Pushing a version tag such as `v0.2.2` puts the Windows, Mac and Linux installers on a GitHub release.
+
 ## 0.2.1
 
 - Copy and paste work on macOS (through `pbcopy` and `pbpaste`) and on Windows (through PowerShell); before, only Linux's clipboard tools were used.
