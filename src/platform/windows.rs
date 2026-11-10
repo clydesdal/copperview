@@ -1,7 +1,7 @@
 //! Windows. Copy and paste go through PowerShell, which every Windows has.
 //!
-//! The program isn't installed from inside the app: on Windows it is simply the
-//! copperview.exe, kept wherever the person likes.
+//! The program isn't installed from inside the app: the Windows installer
+//! (make-windows-installer.ps1) does that, or copperview.exe runs from anywhere.
 
 use std::path::PathBuf;
 use std::process::Command;
@@ -63,11 +63,11 @@ pub fn clipboard_missing_hint() -> &'static str {
 }
 
 pub fn install() -> Result<(), String> {
-    Err("On Windows there is nothing to install: keep copperview.exe wherever you like.".to_string())
+    Err("On Windows, run the Copperview setup program to install, or keep copperview.exe wherever you like.".to_string())
 }
 
 pub fn uninstall() -> Result<(), String> {
-    Err("On Windows there is nothing to uninstall: just delete copperview.exe.".to_string())
+    Err("On Windows, remove Copperview in Settings > Apps, or just delete copperview.exe if you didn't install it.".to_string())
 }
 
 pub fn is_current() -> bool {
