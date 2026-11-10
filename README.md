@@ -4,11 +4,14 @@ A gerber viewer for a specific workflow --only really set up for Altium currentl
 
 ## Download
 
-[The newest builds](https://github.com/clydesdal/copperview/actions/workflows/ci.yml?query=branch%3Amain+is%3Asuccess)
-are on the Actions page. Open the run at the top of the list and look under
-Artifacts: `copperview-linux` is the Linux installer, `copperview-macos` the Mac
-app (zipped) and `copperview-windows` is `copperview.exe`. GitHub only hands
-these out when you are signed in, and keeps each for 90 days.
+[Download the latest release](https://github.com/clydesdal/copperview/releases/latest).
+Pick the file for your system:
+
+- Windows: `copperview-setup-<version>.exe` installs it; `copperview.exe` is the program alone
+- Mac: `Copperview-<version>-macos.dmg`, for Apple Silicon and Intel
+- Linux: `install-copperview-<version>.sh`, run with `sh`
+
+[Installing](#installing) below says what each one does.
 
 ## Using it
 
