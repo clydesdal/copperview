@@ -15,6 +15,17 @@ Esc clear.
 The sample board is vibe coded and really suck --I'll change it soon, and written as real Gerber text with Altium's
 file names. `copperview --write-sample DIR` saves it as files.
 
+## Screenshots
+
+A 4-layer ESP32-P4 + ESP32-C5 dev board (KiCad Gerbers), taken with `--screenshot`.
+
+![Top side](shots/p4dev/01_top.png)
+![3D view](shots/p4dev/04_3d.png)
+![P4 and C5 close up](shots/p4dev/05_p4_c5_zoom.png)
+![P4 package, all layers, light mixing](shots/p4dev/07_p4_all_layers_zoom.png)
+
+More in [shots/p4dev](shots/p4dev): every layer, the bottom side, and ink on paper.
+
 ## Building
 
 One source builds on Linux, macOS and Windows. `rust-toolchain.toml` pins the
